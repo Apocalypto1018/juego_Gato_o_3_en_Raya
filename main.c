@@ -10,12 +10,13 @@
 void inicio();
 void jugar();
 int tablero(int[9], int[9]);
-void presentacion(char[25], char[25], char, char);
+void presentacion(char[25], char[25], char, char, int, int, int);
 int validarGanador(char[FIL][COL]);
 
 void posicionACoordenadas(int*, int*, int);
 int coordenadaAPosicion(int,int);
 int posValidas(int, int[9], int[9], int, int);
+int validarVolverJugar();
 
 void vaciar(int[9]);
 
@@ -126,6 +127,13 @@ void jugar(){
 	int jugarPC=0; //variable de control para saber si va a jugar la pc (1 para si, cero para no)
 	
 	int papel=0; //variable de control, si se desea jugar en papel
+	
+	int volverJugar=0; //variable de control que indica volver a jugar
+	
+	//conteo de victorias y empates
+	int victoriasJugador1=0;
+	int victoriasJugador2=0;
+	int empates=0;
 
 	do{
 		//preguntar cuantos jugadores
@@ -166,7 +174,6 @@ void jugar(){
 		gets(jugador2);
 		
 		printf("\nJugador 2, su caracter es: %c\n", caracter2);
-		pausa();
 		
 		jugarPC=0;
 		
@@ -216,54 +223,109 @@ void jugar(){
 	vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
 	
 	//***************************** Rutina del loop del Juego* ******************************************/
-	while(Jugar==1 && ganador==2){
+	while(Jugar==1 || volverJugar==1){
 		
+		volverJugar=0;
 			//----------Jugador 1 ------------
 		if(papel==1){
 			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 			limP();
-			presentacion(jugador1, jugador2,caracter1, caracter2); //invocacion de la funcion que muestra la presentacion
+			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
 			printf("\n*Revisar el txt\n");
 		}else{
-			presentacion(jugador1, jugador2,caracter1, caracter2); //invocacion de la funcion que muestra la presentacion
+			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
 			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 		}
 		
 		//validacion del valor de ganador para saber si alguien gano
 		if(ganador==0 && caracter1=='x'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
-			break;			
+			volverJugar=validarVolverJugar();
+			if(volverJugar==1){
+				vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+				vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+				posO=0; posX=0;
+				victoriasJugador1++;
+			}else
+				break;		
 		}else if(ganador==0 && caracter1=='o'){
 			if(jugarPC==1){
 				printf("\n*Lo siento, la comutadora ha ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}else{
 				printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}
 		}
-		
 		if(ganador==1 && caracter1=='o'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
-			break;
+			volverJugar=validarVolverJugar();
+			if(volverJugar==1){
+				vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+				vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+				posO=0; posX=0;
+				victoriasJugador1++;
+			}else
+				break;
 		}else if(ganador==1 && caracter1=='x'){
 			if(jugarPC==1){
 				printf("\n*Lo siento, la comutadora ha ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}else{
 				printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}
 		}
 		
 		//validacion de empate
 		if(posX+posO==9){ 
-			printf("\n*Ha sido un empate! No hay Ganador!\n\n", jugador2);
+			printf("\n*Ha sido un empate! No hay Ganador!\n\n");
+			volverJugar=validarVolverJugar();
 			pausa();
 			limP();
-			break;
+			if(volverJugar==1){
+				vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+				vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+				posO=0; posX=0;
+				empates++;
+			}else
+				break;
 		}
-	
+		
+		if(volverJugar==1){ //si se vuelve a jugar, se rePinta el tablero para empezar en cero para el segundo jugador
+			limP();
+			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
+			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+		}
+		
 		//solicitud de las coordenadas del jugador 1
 		do{
 			printf("\nTurno para: %s\n",jugador1);
@@ -293,45 +355,100 @@ void jugar(){
 		if(papel==1){
 			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 			limP();
-			presentacion(jugador1, jugador2,caracter1, caracter2); //invocacion de la funcion que muestra la presentacion
+			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
 			printf("\n*Revisar el txt\n");
 		}else{
-			presentacion(jugador1, jugador2,caracter1, caracter2); //invocacion de la funcion que muestra la presentacion
+			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
 			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 		}
 		
 		//validacion del valor de ganador para saber si alguien gano
 		if(ganador==0 && caracter1=='x'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
-			break;			
+			volverJugar=validarVolverJugar();
+			if(volverJugar==1){
+				vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+				vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+				posO=0; posX=0;
+				victoriasJugador1++;
+			}else
+				break;		
 		}else if(ganador==0 && caracter1=='o'){
 			if(jugarPC==1){
 				printf("\n*Lo siento, la comutadora ha ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}else{
 				printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}
 		}
 		if(ganador==1 && caracter1=='o'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
-			break;
+			volverJugar=validarVolverJugar();
+			if(volverJugar==1){
+				vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+				vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+				posO=0; posX=0;
+				victoriasJugador1++;
+			}else
+				break;
 		}else if(ganador==1 && caracter1=='x'){
 			if(jugarPC==1){
 				printf("\n*Lo siento, la comutadora ha ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}else{
 				printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
-				break;
+				volverJugar=validarVolverJugar();
+				if(volverJugar==1){
+					vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+					vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+					posO=0; posX=0;
+					victoriasJugador2++;
+				}else
+					break;
 			}
 		}
 		
 		//validacion de empate
 		if(posX+posO==9){ 
-			printf("\n*Ha sido un empate! No hay Ganador!\n\n", jugador2);
+			printf("\n*Ha sido un empate! No hay Ganador!\n\n");
+			volverJugar=validarVolverJugar();
 			pausa();
 			limP();
-			break;
+			if(volverJugar==1){
+				vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
+				vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
+				posO=0; posX=0;
+				empates++;
+			}else
+				break;
+		}
+		
+		if(volverJugar==1){ //si se vuelve a jugar, se rePinta el tablero para empezar en cero para el segundo jugador
+			limP();
+			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
+			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 		}
 		
 		//solicitud de las coordenadas del jugador 2
@@ -379,9 +496,10 @@ void jugar(){
 }
 
 //funcion que muestra la cabecera con los nombres
-void presentacion(char jugador1[25], char jugador2[25], char c1, char c2){
+void presentacion(char jugador1[25], char jugador2[25], char c1, char c2, int victoriasJugador1, int victoriasJugador2, int empates){
 	//presentacion
-	printf("               %s con: %c  |VS|  %s con: %c\n\n", jugador1,c1, jugador2,c2);
+	printf("              Jugador 1 %s con: %c  |VS|  Jugador 2 %s con: %c\n\n", jugador1,c1, jugador2,c2);
+	printf("Victorias Jugador1: %i. |||  Victorias Jugador2: %i. ||| Empates: %i\n\n", victoriasJugador1,victoriasJugador2, empates);
 }
 
 //funcion del tablero 
@@ -770,6 +888,23 @@ int coordenadaAPosicion(int f,int c){
 		pos=9;
 	
 	return pos;
+}
+
+//funcion que valida si se desea volver a jugar con los mismo alias
+int validarVolverJugar(){
+	int volverJugar=0;
+	
+	clean_stdin();
+	
+	do{
+		printf("\n*Ingrese 1 si desea continuar jugando, 0 para salir\n->");
+		scanf("%i", &volverJugar);
+		
+	}while(volverJugar<0 || volverJugar>1);
+	
+	clean_stdin();
+	
+	return volverJugar;
 }
 
 // vaciar array
