@@ -17,6 +17,7 @@ int validarGanador(char[FIL][COL]);
 
 void posicionACoordenadas(int*, int*, int);
 int coordenadaAPosicion(int,int);
+int posValidas(int, int[9], int[9], int, int);
 
 void vaciar(int[9]);
 
@@ -154,6 +155,8 @@ void jugar(){
 	int posO=0; //variable iterador del vector
 	
 	int ganador=2;//variable de control que alerta si hay un ganador
+	
+	int posAux=0; //varaible auxiliar que serivira para saber si la posiciones ya fue ocupada
 
 	do{
 		//preguntar cuantos jugadores
@@ -231,22 +234,30 @@ void jugar(){
 	vaciar(posOcupadasX); //se borra o inicializa en cero todas las posciones del vector
 	vaciar(posOcupadasO); //se borra o inicializa en cero todas las posciones del vector
 	
-	//*****************************rutina del loop del juego*******************************************/
+	//***************************** Rutina del loop del Juego* ******************************************/
 	while(Jugar==1 && ganador==2){
 		
-		//solicitud de las coordenadas jugador 1
+		//Jugador 1
 		presentacion(jugador1, jugador2,caracter1, caracter2); //invocacion de la funcion que muestra la presentacion
-	
+		
 		ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 		
-		if(ganador==0){
+		if(ganador==0 && caracter1=='x'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
-			break;
-		}if(ganador==1){
+			break;			
+		}else if(ganador==0 && caracter1=='o'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
 			break;
 		}
-			
+		if(ganador==1 && caracter1=='o'){
+			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
+			break;
+		}else if(ganador==1 && caracter1=='x'){
+			printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
+			break;
+		}
+		
+		//solicitud de las coordenadas del jugador 1
 		do{
 			printf("\nTurno para: %s\n",jugador1);
 			printf("\n*Ingrese la Fila de la posicion a alegir\n->");
@@ -257,27 +268,40 @@ void jugar(){
 			
 			posicion=coordenadaAPosicion(fila, columna);
 			
-		}while(fila<0 || columna<0);
+		}while(fila<0 || columna<0 || fila>2 || columna>2 || posValidas(posicion, posOcupadasX, posOcupadasO, posX, posO)!=1); //valiadacion de las coordenadas
 		
-		posOcupadasX[posX]=posicion;
-		posX++;
+		if(caracter1=='x'){ 
+			posOcupadasX[posX]=posicion;
+			posX++;
+		}else{
+			posOcupadasO[posO]=posicion;
+			posO++;
+		}
 
 		system("pause");
 		system("cls");
 		
-		//solicitud de las coordenadas jugador 2
+		//Jugador 2
 		presentacion(jugador1, jugador2,caracter1, caracter2); //invocacion de la funcion que muestra la presentacion
 	
 		ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
 		
-		if(ganador==0){
+		if(ganador==0 && caracter1=='x'){
+			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
+			break;			
+		}else if(ganador==0 && caracter1=='o'){
+			printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
+			break;
+		}
+		if(ganador==1 && caracter1=='o'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador1);
 			break;
-		}if(ganador==1){
+		}else if(ganador==1 && caracter1=='x'){
 			printf("\n*Felicidades: %s has ganado!!\n\n", jugador2);
 			break;
 		}
 		
+		//solicitud de las coordenadas del jugador 2
 		do{
 			printf("\nTurno para: %s\n",jugador2);
 			printf("\n*Ingrese la Fila de la posicion a alegir\n->");
@@ -288,15 +312,21 @@ void jugar(){
 			
 			posicion=coordenadaAPosicion(fila, columna);
 			
-		}while(fila<0 || columna<0);
+		}while(fila<0 || columna<0 || fila>2 || columna>2 || posValidas(posicion, posOcupadasX, posOcupadasO, posX, posO)!=1); //valiadacion de las coordenadas
 		
-		posOcupadasO[posO]=posicion;
-		posO++;
+		if(caracter2=='x'){
+			posOcupadasX[posX]=posicion;
+			posX++;
+		}else{
+			posOcupadasO[posO]=posicion;
+			posO++;
+		}
 		
 		system("pause");
 		system("cls");
 		
 	}
+	//***************************** Fin del loop del Juego* ******************************************/
 	
 	printf("\n\n");
 	system("pause");
@@ -507,6 +537,34 @@ int tablero(int posOcupadasX[9], int posOcupadasO[9]){
 	return ganador;
 }
 
+//valida las posiciones desocupadas 
+int posValidas(int pos, int posOcupadasX[9], int posOcupadasO[9], int posX, int posO){
+	int i=0;
+	//validar posiciones ocupadas por X
+	for (i = 0; i < posX; i++){
+
+		if (pos == posOcupadasX[i]){
+			printf("\n*La posicion elegida ya ha sido ocupada\n");
+			system("pause");
+			return 0;
+		}
+	
+	}
+	
+	//validar posiciones ocupadas por O
+	for (i = 0; i < posO; i++){
+
+		if (pos == posOcupadasO[i]){
+			printf("\n*La posicion elegida ya ha sido ocupada\n");
+			system("pause");
+			return 0;
+		}
+	
+	}
+
+	return 1;
+}
+
 /**********************************inicio funcion ganador**************************************/
 int validarGanador(char C[FIL][COL]){
 	
@@ -681,5 +739,3 @@ void vaciar(int posOcupadas[9])
 		posOcupadas[i] = 0;
 	}
 }
-
-
