@@ -9,7 +9,7 @@
 //prototipos de las funciones
 void inicio();
 void jugar();
-int tablero(int[9], int[9]);
+int tablero(int[9], int[9], int);
 void presentacion(char[25], char[25], char, char, int, int, int);
 int validarGanador(char[FIL][COL]);
 
@@ -150,11 +150,13 @@ void jugar(){
 	if(nJugadores==2){
 		//solicitud de los nombres de los jugadores
 		printf("\n*Ingrese el nombre del primer jugador\n->");
-		gets(jugador1);
+		scanf("%s", &jugador1);
+		
+		clean_stdin();
 		
 		//pedir caracter para el jugador 1
 		do{
-			printf("*Jugador 1 Ingrese el caracter a jugar entre x/o\n->");
+			printf("\n*Jugador 1 Ingrese el caracter a jugar entre x/o\n->");
 			scanf("%c", &caracter1);
 		
 			if(caracter1!='x' && caracter1!='o')
@@ -171,7 +173,9 @@ void jugar(){
 			caracter2='x';
 		
 		printf("\n*Ingrese el nombre del segundo jugador\n->");
-		gets(jugador2);
+		scanf("%s", &jugador2);
+		
+		clean_stdin();
 		
 		printf("\nJugador 2, su caracter es: %c\n", caracter2);
 		
@@ -183,11 +187,13 @@ void jugar(){
 	
 		//pedir nombre del jugador
 		printf("\n*Ingrese el nombre del primer jugador\n->");
-		gets(jugador1);
+		scanf("%s", &jugador1);
+		
+		clean_stdin();
 		
 		//pedir caracter para el jugador
 		do{
-			printf("*Ingrese el caracter a jugar entre x/o\n->");
+			printf("\n*Ingrese el caracter a jugar entre x/o\n->");
 			scanf("%c", &caracter1);
 			
 			if(caracter1!='x' && caracter1!='o')
@@ -228,13 +234,13 @@ void jugar(){
 		volverJugar=0;
 			//----------Jugador 1 ------------
 		if(papel==1){
-			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+			ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
 			limP();
 			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
 			printf("\n*Revisar el txt\n");
 		}else{
 			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
-			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+			ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
 		}
 		
 		//validacion del valor de ganador para saber si alguien gano
@@ -322,8 +328,15 @@ void jugar(){
 		
 		if(volverJugar==1){ //si se vuelve a jugar, se rePinta el tablero para empezar en cero para el segundo jugador
 			limP();
-			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
-			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+			if(papel==1){
+				ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
+				limP();
+				presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
+				printf("\n*Revisar el txt\n");
+			}else{
+				presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
+				ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
+			}
 		}
 		
 		//solicitud de las coordenadas del jugador 1
@@ -353,13 +366,13 @@ void jugar(){
 		//----------Jugador 2 ------------
 
 		if(papel==1){
-			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+			ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
 			limP();
 			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
 			printf("\n*Revisar el txt\n");
 		}else{
 			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
-			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+			ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
 		}
 		
 		//validacion del valor de ganador para saber si alguien gano
@@ -447,8 +460,15 @@ void jugar(){
 		
 		if(volverJugar==1){ //si se vuelve a jugar, se rePinta el tablero para empezar en cero para el segundo jugador
 			limP();
-			presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
-			ganador=tablero(posOcupadasX, posOcupadasO); //invocacion de la funcion que muestra el tablero
+			if(papel==1){
+				ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
+				limP();
+				presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
+				printf("\n*Revisar el txt\n");
+			}else{
+				presentacion(jugador1, jugador2,caracter1, caracter2, victoriasJugador1, victoriasJugador2, empates); //invocacion de la funcion que muestra la presentacion
+				ganador=tablero(posOcupadasX, posOcupadasO, papel); //invocacion de la funcion que muestra el tablero
+			}
 		}
 		
 		//solicitud de las coordenadas del jugador 2
@@ -495,15 +515,19 @@ void jugar(){
 	pausa();
 }
 
+//validar 
+
 //funcion que muestra la cabecera con los nombres
 void presentacion(char jugador1[25], char jugador2[25], char c1, char c2, int victoriasJugador1, int victoriasJugador2, int empates){
 	//presentacion
-	printf("              Jugador 1 %s con: %c  |VS|  Jugador 2 %s con: %c\n\n", jugador1,c1, jugador2,c2);
-	printf("Victorias Jugador1: %i. |||  Victorias Jugador2: %i. ||| Empates: %i\n\n", victoriasJugador1,victoriasJugador2, empates);
+	printf("           Jugador 1 %s con: %c  |VS|  Jugador 2 %s con: %c\n\n", jugador1,c1, jugador2,c2);
+	printf("Victorias Jugador1: %i. |||  Victorias Jugador2: %i. ||| Empates: %i\n\n\n", victoriasJugador1,victoriasJugador2, empates);
 }
 
 //funcion del tablero 
-int tablero(int posOcupadasX[9], int posOcupadasO[9]){
+int tablero(int posOcupadasX[9], int posOcupadasO[9], int papel){
+	FILE* archivo=fopen("gato.txt", "wt"); //se abre o se crea el archivo en modo Sobreescritura
+	
 	//var locales
 	int i=0,j=0, k=0;
 	
@@ -581,54 +605,98 @@ int tablero(int posOcupadasX[9], int posOcupadasO[9]){
 			if(pos1X==1 && i==1 && j==6){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos2X==1 && i==1 && j==10){
 				matriz[i][j]='X';
 				printf("X");
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos3X==1 && i==1 && j==14){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos4X==1 && i==3 && j==6){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos5X==1 && i==3 && j==10){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos6X==1 && i==3 && j==14){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos7X==1 && i==5 && j==6){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos8X==1 && i==5 && j==10){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos9X==1 && i==5 && j==14){
 				matriz[i][j]='X';
 				printf("X");
+				
+				if(papel==1){
+					fputs("X",archivo);
+				}
+				
 				bandera=1;
 			}
 			
@@ -636,68 +704,122 @@ int tablero(int posOcupadasX[9], int posOcupadasO[9]){
 			if(pos1O==1 && i==1 && j==6){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos2O==1 && i==1 && j==10){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos3O==1 && i==1 && j==14){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos4O==1 && i==3 && j==6){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos5O==1 && i==3 && j==10){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos6O==1 && i==3 && j==14){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos7O==1 && i==5 && j==6){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos8O==1 && i==5 && j==10){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 			
 			if(pos9O==1 && i==5 && j==14){
 				matriz[i][j]='O';
 				printf("O");
+				
+				if(papel==1){
+					fputs("O",archivo);
+				}
+				
 				bandera=1;
 			}
 		
 			//si no se imprimio un caracter de x o o se imprime el caracter original en la matriz definida previamente
 			if(bandera!=1){ 
 				printf("%c",matriz[i][j]);
+				
+				if(papel==1){
+					fputc(matriz[i][j],archivo);
+				}
 			}
 			bandera=0;
 		}
 		printf("\n");
+		
+		if(papel==1){
+			fputs("\n",archivo);
+		}
 	}
 	
 	ganador=validarGanador(matriz);
 	
+	fclose(archivo);
 	return ganador;
 }
 
@@ -726,20 +848,20 @@ int posValidas(int pos, int posOcupadasX[9], int posOcupadasO[9], int posX, int 
 }
 
 /**********************************inicio funcion ganador**************************************/
-int validarGanador(char C[FIL][COL]){
+int validarGanador(char matriz[FIL][COL]){
 	
 	//validar desde la posicion 1 las 3 posiciones de su final y columna
-	if(C[1][6] == 'X' || C[1][6] == 'O'){
-		if(C[1][6] == C[1][10] && C[1][6] == C[1][14]){
-			if(C[1][6] == 'X'){
+	if(matriz[1][6] == 'X' || matriz[1][6] == 'O'){
+		if(matriz[1][6] == matriz[1][10] && matriz[1][10] == matriz[1][14]){
+			if(matriz[1][6] == 'X'){
 				return 0;
 			}
 			else{
 				return 1; 
 			}
 		}
-		if(C[1][6] == C[3][6] && C[1][6] == C[5][6]){
-			if(C[1][6] == 'O'){
+		if(matriz[1][6] == matriz[3][6] && matriz[3][6] == matriz[5][6]){
+			if(matriz[1][6] == 'O'){
 				return 1; 
 			}
 			else{
@@ -749,10 +871,10 @@ int validarGanador(char C[FIL][COL]){
 	}
 	
 	//validar desde el centro las diagolaes su fila y su columna
-	if(C[3][10] == 'X' || C[3][10] == 'O'){
+	if(matriz[3][10] == 'X' || matriz[3][10] == 'O'){
 		//validar  la diagonal principal
-		if(C[3][10] == C[1][6] && C[3][10] == C[5][14]){
-			if(C[3][10] == 'X'){
+		if(matriz[3][10] == matriz[1][6] && matriz[1][6] == matriz[5][14]){
+			if(matriz[3][10] == 'X'){
 				return 0;
 			}
 			else{
@@ -761,8 +883,8 @@ int validarGanador(char C[FIL][COL]){
 			}
 		}
 		//validar fila central
-		if(C[3][10] == C[3][6] && C[3][10] == C[3][14]){
-			if(C[3][10] == 'X'){
+		if(matriz[3][10] == matriz[3][6] && matriz[3][6] == matriz[3][14]){
+			if(matriz[3][10] == 'X'){
 				return 0; 
 			}
 			else{
@@ -771,8 +893,8 @@ int validarGanador(char C[FIL][COL]){
 			}
 		}
 		//validar diagonal secundaria
-		if(C[3][10] == C[5][6] && C[3][10] == C[1][14]){
-			if(C[3][10] == 'X'){
+		if(matriz[3][10] == matriz[5][6] && matriz[5][6] == matriz[1][14]){
+			if(matriz[3][10] == 'X'){
 				return 0; 
 			}
 			else{
@@ -781,8 +903,8 @@ int validarGanador(char C[FIL][COL]){
 			}
 		}
 		//validar columna central
-		if(C[3][10] == C[1][10] && C[3][10] == C[5][10]){
-			if(C[3][10] == 'X'){
+		if(matriz[3][10] == matriz[1][10] && matriz[1][10] == matriz[5][10]){
+			if(matriz[3][10] == 'X'){
 				return 0;
 			}
 			else{
@@ -793,9 +915,9 @@ int validarGanador(char C[FIL][COL]){
 	}
 	
 	//validar desde la posicion 9 las 3 posiciones de su final y columna
-	if(C[5][14] == 'X' || C[5][14] == 'O'){
-		if(C[5][14] == C[5][6] && C[5][14] == C[5][10]){
-			if(C[5][14] == 'X'){
+	if(matriz[5][14] == 'X' || matriz[5][14] == 'O'){
+		if(matriz[5][14] == matriz[5][6] && matriz[5][6] == matriz[5][10]){
+			if(matriz[5][14] == 'X'){
 				return 0; 
 			}
 			else{
@@ -803,8 +925,8 @@ int validarGanador(char C[FIL][COL]){
 			
 			}
 		}
-		if(C[5][14] == C[1][14] && C[5][14] == C[3][14]){
-			if(C[5][14] == 'X'){
+		if(matriz[5][14] == matriz[1][14] && matriz[1][14] == matriz[3][14]){
+			if(matriz[5][14] == 'X'){
 				return 0; 
 			}
 			else{
